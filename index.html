@@ -686,12 +686,12 @@
         /* SCROLL REVEAL */
         .reveal {
             opacity: 0;
-            transform: translateY(16px);
-            transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+            transform: translateY(8px) scale(0.99);
+            transition: opacity 0.15s ease-out, transform 0.15s ease-out;
         }
         .reveal.visible {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
         }
 
         /* Sections rendered normally for instant scroll appearance */
@@ -1193,7 +1193,7 @@ const observer = new IntersectionObserver((entries) => {
             observer.unobserve(entry.target); // stop watching once revealed
         }
     });
-}, { threshold: 0.05, rootMargin: '0px 0px 80px 0px' });
+}, { threshold: 0.01, rootMargin: '0px 0px 120px 0px' });
 revealEls.forEach(el => observer.observe(el));
 
 // Header shrink on scroll - passive listener for perf
