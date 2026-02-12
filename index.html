@@ -46,9 +46,41 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@400;600;700;800;900&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet"></noscript>
     
     <style>
+        /* SPLASH LOADER - shows instantly before anything else */
+        .splash {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: #06060b;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+        .splash.done { opacity: 0; visibility: hidden; pointer-events: none; }
+        .splash-logo {
+            width: 60px; height: 60px;
+            animation: splashPulse 1s ease-in-out infinite alternate;
+        }
+        .splash-text {
+            font-family: monospace;
+            font-size: 14px;
+            color: #ffc847;
+            letter-spacing: 4px;
+            margin-top: 16px;
+            opacity: 0.6;
+        }
+        @keyframes splashPulse {
+            0% { transform: scale(1); opacity: 0.7; }
+            100% { transform: scale(1.08); opacity: 1; }
+        }
+
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
@@ -75,12 +107,12 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* NOISE */
+        /* NOISE - lightweight CSS grain instead of SVG filter */
         body::before {
             content: '';
             position: fixed;
             inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            background: repeating-conic-gradient(rgba(255,255,255,0.01) 0% 25%, transparent 0% 50%) 0 0 / 3px 3px;
             pointer-events: none;
             z-index: 9999;
         }
@@ -96,12 +128,14 @@
             pointer-events: none;
         }
 
-        /* GLOWS */
+        /* GLOWS - optimized with reduced blur and GPU compositing */
         .glow-orb {
             position: fixed;
             border-radius: 50%;
-            filter: blur(120px);
+            filter: blur(80px);
             pointer-events: none;
+            
+            contain: strict;
             animation: drift 12s ease-in-out infinite alternate;
         }
         .glow-orb.gold { width: 600px; height: 600px; background: rgba(255,200,71,0.07); top: -150px; right: -150px; }
@@ -120,12 +154,14 @@
             pointer-events: none;
             z-index: 1;
             overflow: hidden;
+            contain: strict;
         }
         .float-emoji {
             position: absolute;
             font-size: 24px;
             opacity: 0.06;
             animation: floatUp linear infinite;
+            
         }
         @keyframes floatUp {
             0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
@@ -145,8 +181,9 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            backdrop-filter: blur(24px);
-            background: rgba(6,6,11,0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            background: rgba(6,6,11,0.82);
             border-bottom: 1px solid rgba(255,255,255,0.04);
             transition: all 0.3s;
         }
@@ -166,6 +203,7 @@
             width: 38px;
             height: 38px;
             animation: spin3d 4s ease-in-out infinite;
+            
         }
 
         @keyframes spin3d {
@@ -414,6 +452,7 @@
                 0 40px 80px rgba(0,0,0,0.5),
                 0 0 120px rgba(255,200,71,0.05);
             animation: float 4s ease-in-out infinite;
+            
             z-index: 2;
         }
 
@@ -545,8 +584,8 @@
             display: flex;
             justify-content: space-around;
             padding: 12px 0 24px;
-            background: rgba(6,6,11,0.9);
-            backdrop-filter: blur(12px);
+            background: rgba(6,6,11,0.95);
+            backdrop-filter: blur(8px);
             border-top: 1px solid rgba(255,255,255,0.05);
         }
         .phone-nav-item { text-align: center; font-size: 8px; color: var(--text-dim); font-weight: 600; }
@@ -578,6 +617,7 @@
             gap: 40px;
             animation: scroll 30s linear infinite;
             width: max-content;
+            
         }
         .ticker span {
             font-family: 'Space Mono', monospace;
@@ -646,13 +686,15 @@
         /* SCROLL REVEAL */
         .reveal {
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.7s ease, transform 0.7s ease;
+            transform: translateY(16px);
+            transition: opacity 0.35s ease-out, transform 0.35s ease-out;
         }
         .reveal.visible {
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* Sections rendered normally for instant scroll appearance */
 
         /* MOOD GRID */
         .mood-grid {
@@ -775,6 +817,7 @@
             transform: translate(-50%, -50%);
             pointer-events: none;
             animation: ctaPulse 4s ease-in-out infinite;
+            
         }
         @keyframes ctaPulse {
             0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
@@ -835,6 +878,17 @@
     </style>
 </head>
 <body>
+
+<!-- SPLASH LOADER - instant paint while fonts/assets load -->
+<div class="splash" id="splash">
+    <svg class="splash-logo" viewBox="0 0 200 200" fill="none">
+        <path d="M100 180c-44 0-75-30-75-70 0-25 10-45 25-58l-8-32c-1-4 3-7 6-5l25 15c8-3 17-5 27-5s19 2 27 5l25-15c3-2 7 1 6 5l-8 32c15 13 25 33 25 58 0 40-31 70-75 70z" fill="#0a0a0f" stroke="#ffc847" stroke-width="6"/>
+        <circle cx="70" cy="100" r="25" fill="#ffc847"/><circle cx="70" cy="100" r="20" fill="#0a0a0f"/>
+        <circle cx="130" cy="100" r="25" fill="#ffc847"/><circle cx="130" cy="100" r="20" fill="#0a0a0f"/>
+        <path d="M75 145c10 15 40 15 50 0" stroke="#ffc847" stroke-width="4" fill="none" stroke-linecap="round"/>
+    </svg>
+    <div class="splash-text">STOKMOJI</div>
+</div>
 
 <div class="grid-bg"></div>
 <div class="glow-orb gold"></div>
@@ -1122,24 +1176,33 @@
 </footer>
 
 <script>
-// Scroll reveal
+// Dismiss splash as soon as page is interactive
+const splash = document.getElementById('splash');
+function dismissSplash() { splash.classList.add('done'); }
+if (document.readyState === 'complete') dismissSplash();
+else window.addEventListener('load', () => setTimeout(dismissSplash, 200));
+// Safety: auto-dismiss after 2s even if fonts stall
+setTimeout(dismissSplash, 2000);
+
+// Scroll reveal - uses IntersectionObserver (non-blocking)
 const revealEls = document.querySelectorAll('.reveal');
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.classList.add('visible');
+            observer.unobserve(entry.target); // stop watching once revealed
         }
     });
-}, { threshold: 0.15 });
+}, { threshold: 0.05, rootMargin: '0px 0px 80px 0px' });
 revealEls.forEach(el => observer.observe(el));
 
-// Header shrink on scroll
+// Header shrink on scroll - passive listener for perf
 const header = document.getElementById('header');
 window.addEventListener('scroll', () => {
     header.classList.toggle('scrolled', window.scrollY > 50);
-});
+}, { passive: true });
 
-// Floating emojis
+// Floating emojis - DEFERRED 3s after load to not compete with first paint
 const emojis = ['🚀', '💀', '😤', '🦍', '🧘', '🪙', '🎵', '💎', '🐋', '🔥'];
 const container = document.getElementById('floatingEmojis');
 function spawnEmoji() {
@@ -1147,13 +1210,15 @@ function spawnEmoji() {
     el.className = 'float-emoji';
     el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
     el.style.left = Math.random() * 100 + '%';
-    el.style.animationDuration = (15 + Math.random() * 20) + 's';
-    el.style.fontSize = (16 + Math.random() * 16) + 'px';
+    el.style.animationDuration = (18 + Math.random() * 15) + 's';
+    el.style.fontSize = (16 + Math.random() * 12) + 'px';
     container.appendChild(el);
-    setTimeout(() => el.remove(), 35000);
+    setTimeout(() => el.remove(), 33000);
 }
-setInterval(spawnEmoji, 2500);
-for (let i = 0; i < 6; i++) setTimeout(spawnEmoji, i * 400);
+setTimeout(() => {
+    setInterval(spawnEmoji, 5000);
+    for (let i = 0; i < 3; i++) setTimeout(spawnEmoji, i * 800);
+}, 4000);
 </script>
 
 </body>
