@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STOKMOJI — The Soundtrack of Crypto Culture</title>
+    <meta name="description" content="STOKMOJI is the mood-based music app for crypto traders. Hundreds of tracks across 5 moods: MOON, REKT, COPE, DEGEN, ZEN. Earn coins just by vibing. Free on Telegram.">
+    <meta name="keywords" content="STOKMOJI, crypto music, crypto culture, mood music, telegram mini app, degen music, crypto trading music, web3 music">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="STOKMOJI — The Soundtrack of Crypto Culture">
+    <meta property="og:description" content="Mood-based music for crypto traders. Earn coins just by vibing. Where degens come to feel again.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://stokmoji.com">
+    <meta property="og:image" content="https://app.stokmoji.com/logostok.png">
+    <meta property="og:site_name" content="STOKMOJI">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@StokMoji">
+    <meta name="twitter:title" content="STOKMOJI — The Soundtrack of Crypto Culture">
+    <meta name="twitter:description" content="Mood-based music for crypto traders. Earn coins just by vibing.">
+    <meta name="twitter:image" content="https://app.stokmoji.com/logostok.png">
+    
+    <!-- Canonical -->
+    <link rel="canonical" href="https://stokmoji.com">
+    <link rel="icon" href="https://app.stokmoji.com/icons/icon-192.png" type="image/png">
+    
+    <!-- Structured Data for Google -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "MobileApplication",
+      "name": "STOKMOJI",
+      "description": "The soundtrack of crypto culture. Mood-based music streaming app for crypto traders. Earn coins by listening.",
+      "url": "https://stokmoji.com",
+      "applicationCategory": "MusicApplication",
+      "operatingSystem": "Telegram",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "creator": {
+        "@type": "Organization",
+        "name": "STOKMOJI",
+        "url": "https://stokmoji.com",
+        "sameAs": [
+          "https://twitter.com/StokMoji",
+          "https://t.me/StokMoji"
+        ]
+      }
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --gold: #ffc847;
+            --gold-dim: #ffc84730;
+            --bg: #06060b;
+            --bg2: #0c0c14;
+            --text: #ffffff;
+            --text-dim: rgba(255,255,255,0.4);
+            --moon: #22c55e;
+            --rekt: #ef4444;
+            --cope: #f59e0b;
+            --degen: #a855f7;
+            --zen: #06b6d4;
+        }
+
+        html { scroll-behavior: smooth; }
+        
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== NOISE OVERLAY ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* ===== GRID BACKGROUND ===== */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(255,200,71,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,200,71,0.02) 1px, transparent 1px);
+            background-size: 80px 80px;
+            pointer-events: none;
+        }
+
+        /* ===== AMBIENT GLOW ===== */
+        .glow-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            animation: drift 12s ease-in-out infinite alternate;
+        }
+        .glow-orb.gold { width: 500px; height: 500px; background: rgba(255,200,71,0.06); top: -100px; right: -100px; }
+        .glow-orb.purple { width: 400px; height: 400px; background: rgba(168,85,247,0.04); bottom: 10%; left: -100px; animation-delay: -6s; }
+
+        @keyframes drift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(30px, 20px); }
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(20px);
+            background: rgba(6,6,11,0.7);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-mark {
+            width: 40px;
+            height: 40px;
+            animation: spin3d 4s ease-in-out infinite;
+        }
+
+        @keyframes spin3d {
+            0%, 100% { transform: perspective(400px) rotateY(0deg); }
+            50% { transform: perspective(400px) rotateY(180deg); }
+        }
+
+        .logo-text {
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 20px;
+            letter-spacing: 3px;
+            color: var(--gold);
+        }
+
+        .header-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .header-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .header-links a:hover { color: var(--gold); }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            background: var(--gold);
+            color: #000;
+            font-weight: 700;
+            font-size: 14px;
+            border-radius: 100px;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(255,200,71,0.3);
+        }
+
+        .cta-btn-outline {
+            background: transparent;
+            border: 1px solid rgba(255,200,71,0.3);
+            color: var(--gold);
+        }
+
+        .cta-btn-outline:hover {
+            background: rgba(255,200,71,0.08);
+            box-shadow: 0 8px 30px rgba(255,200,71,0.1);
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 40px 80px;
+            position: relative;
+        }
+
+        .hero-inner {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .hero-content { position: relative; z-index: 2; }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 100px;
+            background: rgba(255,200,71,0.08);
+            border: 1px solid rgba(255,200,71,0.15);
+            font-size: 13px;
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 28px;
+            animation: fadeUp 0.8s ease-out;
+        }
+
+        .hero-badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--gold);
+            animation: pulse-dot 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        h1 {
+            font-size: clamp(42px, 5.5vw, 72px);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            margin-bottom: 24px;
+            animation: fadeUp 0.8s ease-out 0.1s both;
+        }
+
+        h1 .gold { color: var(--gold); }
+
+        .hero-sub {
+            font-size: 18px;
+            color: var(--text-dim);
+            line-height: 1.7;
+            max-width: 440px;
+            margin-bottom: 40px;
+            animation: fadeUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            animation: fadeUp 0.8s ease-out 0.3s both;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== PHONE MOCKUP ===== */
+        .phone-wrapper {
+            display: flex;
+            justify-content: center;
+            animation: fadeUp 1s ease-out 0.4s both;
+        }
+
+        .phone {
+            width: 300px;
+            height: 620px;
+            background: var(--bg2);
+            border-radius: 40px;
+            border: 2px solid rgba(255,255,255,0.08);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 0 0 1px rgba(255,255,255,0.03),
+                0 40px 80px rgba(0,0,0,0.5),
+                0 0 120px rgba(255,200,71,0.05);
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .phone-notch {
+            width: 120px;
+            height: 28px;
+            background: var(--bg);
+            border-radius: 0 0 16px 16px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 5;
+        }
+
+        .phone-screen {
+            padding: 16px 20px;
+        }
+
+        .phone-greeting {
+            font-size: 18px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 4px;
+        }
+
+        .phone-subtitle {
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-bottom: 16px;
+        }
+
+        .phone-moods {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .phone-mood {
+            flex: 1;
+            text-align: center;
+            padding: 10px 4px;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .phone-mood .emoji { font-size: 20px; display: block; margin-bottom: 4px; }
+        .phone-mood .label { font-size: 8px; color: var(--text-dim); font-weight: 700; }
+
+        .phone-streak {
+            background: linear-gradient(135deg, rgba(255,200,71,0.08), rgba(255,200,71,0.02));
+            border: 1px solid rgba(255,200,71,0.12);
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 16px;
+        }
+
+        .phone-streak-title {
+            font-size: 11px;
+            color: var(--text-dim);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .phone-streak-days {
+            display: flex;
+            gap: 6px;
+        }
+
+        .streak-day {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .streak-day.done {
+            background: rgba(255,200,71,0.2);
+            border: 1.5px solid var(--gold);
+            color: var(--gold);
+        }
+
+        .streak-day.empty {
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.2);
+        }
+
+        .phone-pulse {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 16px;
+        }
+
+        .phone-pulse-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .phone-pulse-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--moon);
+            animation: pulse-dot 1.5s ease-in-out infinite;
+        }
+
+        .phone-pulse-label { font-size: 10px; color: var(--text-dim); font-weight: 600; }
+
+        .pulse-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+
+        .pulse-emoji { font-size: 12px; width: 18px; text-align: center; }
+        .pulse-track { flex: 1; height: 5px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; }
+        .pulse-fill { height: 100%; border-radius: 3px; animation: growBar 1.5s ease-out forwards; }
+        .pulse-pct { font-size: 9px; color: var(--text-dim); width: 24px; text-align: right; font-weight: 700; }
+
+        @keyframes growBar {
+            from { width: 0; }
+        }
+
+        .phone-track {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .phone-track-art {
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--gold-dim), rgba(168,85,247,0.2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .phone-track-info { flex: 1; }
+        .phone-track-title { font-size: 12px; font-weight: 700; color: white; }
+        .phone-track-artist { font-size: 10px; color: var(--text-dim); }
+
+        .phone-track-play {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .phone-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0 24px;
+            background: rgba(6,6,11,0.9);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .phone-nav-item {
+            text-align: center;
+            font-size: 8px;
+            color: var(--text-dim);
+            font-weight: 600;
+        }
+
+        .phone-nav-item.active { color: var(--gold); }
+        .phone-nav-item .nav-icon { font-size: 18px; display: block; margin-bottom: 2px; }
+
+        /* ===== MOODS SECTION ===== */
+        .section {
+            padding: 100px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            color: var(--gold);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: clamp(32px, 4vw, 52px);
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+        }
+
+        .section-desc {
+            font-size: 17px;
+            color: var(--text-dim);
+            max-width: 500px;
+            line-height: 1.7;
+            margin-bottom: 48px;
+        }
+
+        .mood-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+
+        .mood-card {
+            padding: 32px 16px;
+            border-radius: 24px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.02);
+            transition: all 0.4s;
+            cursor: default;
+        }
+
+        .mood-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--card-color);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .mood-emoji { font-size: 48px; display: block; margin-bottom: 12px; }
+        .mood-name { font-weight: 800; font-size: 16px; margin-bottom: 6px; }
+        .mood-desc { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+
+        /* ===== HOW IT WORKS ===== */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .step-card {
+            padding: 40px 28px;
+            border-radius: 24px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.06);
+            position: relative;
+        }
+
+        .step-num {
+            font-family: 'Space Mono', monospace;
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--gold);
+            opacity: 0.15;
+            position: absolute;
+            top: 20px;
+            right: 24px;
+        }
+
+        .step-icon { font-size: 36px; margin-bottom: 20px; display: block; }
+        .step-title { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+        .step-desc { font-size: 14px; color: var(--text-dim); line-height: 1.7; }
+
+        /* ===== STATS BAR ===== */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            padding: 60px 40px;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            margin: 0 auto;
+            max-width: 900px;
+        }
+
+        .stat-item { text-align: center; }
+        .stat-num {
+            font-size: 40px;
+            font-weight: 900;
+            color: var(--gold);
+            font-family: 'Space Mono', monospace;
+        }
+        .stat-label { font-size: 13px; color: var(--text-dim); margin-top: 6px; font-weight: 500; }
+
+        /* ===== CTA SECTION ===== */
+        .cta-section {
+            text-align: center;
+            padding: 120px 40px;
+            position: relative;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(36px, 4.5vw, 56px);
+            font-weight: 900;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 18px;
+            color: var(--text-dim);
+            margin-bottom: 40px;
+        }
+
+        .cta-glow {
+            position: absolute;
+            width: 600px;
+            height: 300px;
+            background: radial-gradient(ellipse, rgba(255,200,71,0.08), transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            padding: 40px;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--gold); }
+
+        .footer-copy { color: rgba(255,255,255,0.15); font-size: 13px; }
+
+        /* ===== MOBILE ===== */
+        @media (max-width: 768px) {
+            header { padding: 16px 20px; }
+            .header-links { display: none; }
+            
+            .hero { padding: 100px 20px 60px; }
+            .hero-inner { grid-template-columns: 1fr; gap: 50px; text-align: center; }
+            .hero-sub { margin: 0 auto 32px; }
+            .hero-actions { justify-content: center; }
+            
+            .phone { width: 260px; height: 540px; }
+            
+            .section { padding: 60px 20px; }
+            .mood-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+            .mood-card { padding: 20px 10px; }
+            .mood-emoji { font-size: 32px; }
+            .mood-name { font-size: 13px; }
+            .mood-desc { display: none; }
+            
+            .steps-grid { grid-template-columns: 1fr; gap: 16px; }
+            .step-card { padding: 28px 20px; }
+            
+            .stats-bar { gap: 30px; flex-wrap: wrap; padding: 40px 20px; }
+            .stat-num { font-size: 28px; }
+            
+            .cta-section { padding: 80px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="glow-orb gold"></div>
+<div class="glow-orb purple"></div>
+
+<!-- HEADER -->
+<header>
+    <div class="logo-group">
+        <svg class="logo-mark" viewBox="0 0 200 200" fill="none">
+            <path d="M100 180c-44 0-75-30-75-70 0-25 10-45 25-58l-8-32c-1-4 3-7 6-5l25 15c8-3 17-5 27-5s19 2 27 5l25-15c3-2 7 1 6 5l-8 32c15 13 25 33 25 58 0 40-31 70-75 70z" fill="#0a0a0f" stroke="#ffc847" stroke-width="6"/>
+            <circle cx="70" cy="100" r="25" fill="#ffc847"/><circle cx="70" cy="100" r="20" fill="#0a0a0f"/>
+            <circle cx="130" cy="100" r="25" fill="#ffc847"/><circle cx="130" cy="100" r="20" fill="#0a0a0f"/>
+            <path d="M75 145c10 15 40 15 50 0" stroke="#ffc847" stroke-width="4" fill="none" stroke-linecap="round"/>
+        </svg>
+        <span class="logo-text">STOKMOJI</span>
+    </div>
+    <div class="header-links">
+        <a href="#moods">Moods</a>
+        <a href="#how">How It Works</a>
+        <a href="https://t.me/StokMoji" target="_blank">Community</a>
+        <a href="https://twitter.com/StokMoji" target="_blank">𝕏</a>
+    </div>
+    <a href="https://t.me/StokMoji_Bot/app" class="cta-btn">🎵 Open App</a>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-inner">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="dot"></span>
+                Live on Telegram
+            </div>
+            <h1>The soundtrack of<br><span class="gold">crypto culture.</span></h1>
+            <p class="hero-sub">
+                Mood-based tracks for every market moment. 
+                Moon vibes. Rekt anthems. Cope tracks. 
+                Earn coins just by vibing. Free forever.
+            </p>
+            <div class="hero-actions">
+                <a href="https://t.me/StokMoji_Bot/app" class="cta-btn">🎵 Open on Telegram</a>
+                <a href="https://t.me/StokMoji" class="cta-btn cta-btn-outline" target="_blank">✈️ Join Community</a>
+            </div>
+        </div>
+
+        <div class="phone-wrapper">
+            <div class="phone">
+                <div class="phone-notch"></div>
+                <div class="phone-screen">
+                    <div class="phone-greeting">How you feeling, degen?</div>
+                    <div class="phone-subtitle">Tap a mood to vibe — earn coins just by listening 🪙</div>
+                    <div class="phone-moods">
+                        <div class="phone-mood"><span class="emoji">🚀</span><span class="label">MOON</span></div>
+                        <div class="phone-mood"><span class="emoji">💀</span><span class="label">REKT</span></div>
+                        <div class="phone-mood"><span class="emoji">😤</span><span class="label">COPE</span></div>
+                        <div class="phone-mood"><span class="emoji">🦍</span><span class="label">DEGEN</span></div>
+                        <div class="phone-mood"><span class="emoji">🧘</span><span class="label">ZEN</span></div>
+                    </div>
+                    <div class="phone-streak">
+                        <div class="phone-streak-title">🔥 Streak — Day 4 of 7</div>
+                        <div class="phone-streak-days">
+                            <div class="streak-day done">1</div>
+                            <div class="streak-day done">2</div>
+                            <div class="streak-day done">3</div>
+                            <div class="streak-day done">4</div>
+                            <div class="streak-day empty">5</div>
+                            <div class="streak-day empty">6</div>
+                            <div class="streak-day empty">🪙</div>
+                        </div>
+                    </div>
+                    <div class="phone-pulse">
+                        <div class="phone-pulse-header">
+                            <span class="phone-pulse-dot"></span>
+                            <span class="phone-pulse-label">Culture Pulse</span>
+                        </div>
+                        <div class="pulse-bar-row"><span class="pulse-emoji">🚀</span><div class="pulse-track"><div class="pulse-fill" style="width:38%;background:var(--moon)"></div></div><span class="pulse-pct">38%</span></div>
+                        <div class="pulse-bar-row"><span class="pulse-emoji">💀</span><div class="pulse-track"><div class="pulse-fill" style="width:22%;background:var(--rekt)"></div></div><span class="pulse-pct">22%</span></div>
+                        <div class="pulse-bar-row"><span class="pulse-emoji">😤</span><div class="pulse-track"><div class="pulse-fill" style="width:18%;background:var(--cope)"></div></div><span class="pulse-pct">18%</span></div>
+                        <div class="pulse-bar-row"><span class="pulse-emoji">🦍</span><div class="pulse-track"><div class="pulse-fill" style="width:14%;background:var(--degen)"></div></div><span class="pulse-pct">14%</span></div>
+                        <div class="pulse-bar-row"><span class="pulse-emoji">🧘</span><div class="pulse-track"><div class="pulse-fill" style="width:8%;background:var(--zen)"></div></div><span class="pulse-pct">8%</span></div>
+                    </div>
+                    <div class="phone-track">
+                        <div class="phone-track-art">🎵</div>
+                        <div class="phone-track-info">
+                            <div class="phone-track-title">Exit Liquidity</div>
+                            <div class="phone-track-artist">Lola Likwidity</div>
+                        </div>
+                        <div class="phone-track-play">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="black"><polygon points="5,3 19,12 5,21"/></svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="phone-nav">
+                    <div class="phone-nav-item active"><span class="nav-icon">🏠</span>Home</div>
+                    <div class="phone-nav-item"><span class="nav-icon">🎵</span>Vibes</div>
+                    <div class="phone-nav-item"><span class="nav-icon">👤</span>Profile</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+    <div class="stat-item"><div class="stat-num">∞</div><div class="stat-label">Tracks & Growing</div></div>
+    <div class="stat-item"><div class="stat-num">5</div><div class="stat-label">Moods</div></div>
+    <div class="stat-item"><div class="stat-num">Free</div><div class="stat-label">Forever</div></div>
+    <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-label">Vibes</div></div>
+</div>
+
+<!-- MOODS -->
+<section class="section" id="moods">
+    <div class="section-label">Five Moods</div>
+    <div class="section-title">Music for every market moment.</div>
+    <div class="section-desc">Whether you're up 300% or down to your last sat — there's a mood for that.</div>
+    
+    <div class="mood-grid">
+        <div class="mood-card" style="--card-color: var(--moon)">
+            <span class="mood-emoji">🚀</span>
+            <div class="mood-name" style="color: var(--moon)">MOON</div>
+            <div class="mood-desc">Portfolio pumping. Life is good. Euphoria hits.</div>
+        </div>
+        <div class="mood-card" style="--card-color: var(--rekt)">
+            <span class="mood-emoji">💀</span>
+            <div class="mood-name" style="color: var(--rekt)">REKT</div>
+            <div class="mood-desc">Liquidated. Rugged. Down bad. The pain is real.</div>
+        </div>
+        <div class="mood-card" style="--card-color: var(--cope)">
+            <span class="mood-emoji">😤</span>
+            <div class="mood-name" style="color: var(--cope)">COPE</div>
+            <div class="mood-desc">Holding through the dip. It'll come back. Right?</div>
+        </div>
+        <div class="mood-card" style="--card-color: var(--degen)">
+            <span class="mood-emoji">🦍</span>
+            <div class="mood-name" style="color: var(--degen)">DEGEN</div>
+            <div class="mood-desc">Aping in. No research. Full send. Apes together.</div>
+        </div>
+        <div class="mood-card" style="--card-color: var(--zen)">
+            <span class="mood-emoji">🧘</span>
+            <div class="mood-name" style="color: var(--zen)">ZEN</div>
+            <div class="mood-desc">Touched grass. Closed the charts. Inner peace found.</div>
+        </div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how">
+    <div class="section-label">How It Works</div>
+    <div class="section-title">Three taps to vibes.</div>
+    <div class="section-desc">No signup. No credit card. Just open on Telegram and start listening.</div>
+    
+    <div class="steps-grid">
+        <div class="step-card">
+            <span class="step-num">01</span>
+            <span class="step-icon">📱</span>
+            <div class="step-title">Open on Telegram</div>
+            <div class="step-desc">Launch the STOKMOJI mini app directly inside Telegram. No downloads, no signups.</div>
+        </div>
+        <div class="step-card">
+            <span class="step-num">02</span>
+            <span class="step-icon">🎵</span>
+            <div class="step-title">Pick your mood</div>
+            <div class="step-desc">Tap how you're feeling. We'll queue up tracks that match your crypto market energy.</div>
+        </div>
+        <div class="step-card">
+            <span class="step-num">03</span>
+            <span class="step-icon">🪙</span>
+            <div class="step-title">Earn coins</div>
+            <div class="step-desc">Every listen, every vote, every streak earns you coins. Rewards and perks coming soon.</div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+    <div class="cta-glow"></div>
+    <div style="position:relative;z-index:2;">
+        <h2>Where degens come<br>to <span style="color:var(--gold)">feel again.</span></h2>
+        <p>Join thousands of crypto traders who found their soundtrack.</p>
+        <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+            <a href="https://t.me/StokMoji_Bot/app" class="cta-btn">🎵 Open STOKMOJI</a>
+            <a href="https://twitter.com/StokMoji" class="cta-btn cta-btn-outline" target="_blank">Follow @StokMoji</a>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-links">
+        <a href="https://t.me/StokMoji_Bot/app">Launch App</a>
+        <a href="https://t.me/StokMoji" target="_blank">Telegram</a>
+        <a href="https://twitter.com/StokMoji" target="_blank">Twitter/X</a>
+        <a href="https://app.stokmoji.com/terms">Terms</a>
+        <a href="https://app.stokmoji.com/privacy">Privacy</a>
+    </div>
+    <div class="footer-copy">© 2025 STOKMOJI. The soundtrack of crypto culture. 🐒</div>
+</footer>
+
+</body>
+</html>
