@@ -684,15 +684,7 @@
         }
 
         /* SCROLL REVEAL */
-        .reveal {
-            opacity: 0;
-            transform: translateY(8px) scale(0.99);
-            transition: opacity 0.15s ease-out, transform 0.15s ease-out;
-        }
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
+        /* Sections visible immediately - no scroll reveal */
 
         /* Sections rendered normally for instant scroll appearance */
 
@@ -1184,17 +1176,7 @@ else window.addEventListener('load', () => setTimeout(dismissSplash, 200));
 // Safety: auto-dismiss after 2s even if fonts stall
 setTimeout(dismissSplash, 2000);
 
-// Scroll reveal - uses IntersectionObserver (non-blocking)
-const revealEls = document.querySelectorAll('.reveal');
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target); // stop watching once revealed
-        }
-    });
-}, { threshold: 0.01, rootMargin: '0px 0px 120px 0px' });
-revealEls.forEach(el => observer.observe(el));
+// Sections visible immediately - no scroll reveal needed
 
 // Header shrink on scroll - passive listener for perf
 const header = document.getElementById('header');
